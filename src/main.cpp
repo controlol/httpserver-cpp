@@ -5,6 +5,7 @@
 
 #include "../include/server.hpp"
 #include "../include/jsonParser.hpp"
+#include "../include/stopSignal.hpp"
 
 #define SOCKET_INTERFACE AF_INET
 #define SOCKET_TYPE SOCK_STREAM
@@ -15,27 +16,31 @@
 
 bool running = true;
 
-void stopRunning (int h) {
+void stopRunning (int s) {
+  std::cout << "[INFO] Received stop signal: " << s << "\n";
   running = false;
-  (void)(h);
 }
 
 
 int main() {
   HttpServer server(SOCKET_PORT);
+  // StopSignal stop;
 
   server.startAccept();
 
-  signal(SIGINT, stopRunning);
+  std::function<void()> stopFunc = std::bind(&HttpServer::stopListening, server);
+  StopSignal::setStopServerFunc(stopFunc);
 
-  while (running) {
-    using namespace std::chrono_literals;
-    std::this_thread::sleep_for(100ms);
-  };
+  signal(SIGINT, StopSignal::receiveSignal);
 
-  server.stopListening();
+  // while (running) {
+  //   using namespace std::chrono_literals;
+  //   std::this_thread::sleep_for(100ms);
+  // };
 
-  JSON hoi;
+  // server.stopListening();
+
+  // JSON hoi;
 
   return 0;
 }
