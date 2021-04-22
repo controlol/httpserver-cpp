@@ -16,9 +16,9 @@ void JSON::addJson(std::string path, std::any data) {
 std::string JSON::str(JSON_map data) {
   std::string dataStr("{ ");
 
-  int i = 0;
+  unsigned int i = 0;
   for (auto const& [key, value] : data) {
-    dataStr.append("\"" + key + "\": " + anyToString(data));
+    dataStr.append("\"" + key + "\": " + anyToString(value));
     if (i < data.size()) dataStr.append(", ");
     i++;
   }
@@ -52,7 +52,7 @@ std::string JSON::boolToString(bool b) {
 std::string JSON::vectorToString(std::vector<std::any> data) {
   std::string dataStr("[ ");
 
-  int i = 0;
+  unsigned int i = 0;
   for (auto& d : data) {
     dataStr.append("\"" + anyToString(d) + "\"");
     if (i < data.size()) dataStr.append(", ");
@@ -73,8 +73,8 @@ std::vector<std::string> JSON::split(std::string* str, std::string delimiter) {
   std::vector<std::string> data;
 
   size_t delimiter_length = delimiter.length();
-
   size_t i = 0;
+
   while(1) {
     size_t pos1 = i;
     size_t pos2 = str->find(delimiter, i);
