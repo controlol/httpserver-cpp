@@ -26,6 +26,11 @@ std::string JSON::str(JSON_map data) {
   return dataStr;
 }
 
+/**
+ * return string from datatype
+ * includes quatation marks if it is a string
+ * @param data any type of data almost
+ */
 std::string JSON::anyToString(std::any data) {
   std::string dataStr;
 
@@ -41,14 +46,24 @@ std::string JSON::anyToString(std::any data) {
   if (data.type() == typeid(std::vector<std::any>)) dataStr.append(vectorToString(std::any_cast<std::vector<std::any>>(data)));
   if (data.type() == typeid(JSON::JSON_map)) dataStr.append(str(std::any_cast<JSON::JSON_map>(data)));
 
+  // return empty string with "" if unsupported datatype
+
   return dataStr;
 }
 
+/**
+ * return boolean in string type
+ * @param b
+ */
 std::string JSON::boolToString(bool b) {
   return b ? "true" : "false";
 }
 
 // include some kind of depth so we can add nextlines and appropriate spaces
+/**
+ * return valid json string for an array
+ * @param data
+ */
 std::string JSON::vectorToString(std::vector<std::any> data) {
   std::string dataStr("[ ");
 
@@ -89,6 +104,11 @@ std::vector<std::string> JSON::split(std::string* str, std::string delimiter) {
   return data;
 }
 
+/**
+ * join vector of string by delimiter
+ * @param data
+ * @param delimiter
+ */
 std::string JSON::join(std::vector<std::string>* data, std::string delimiter) {
   std::string dataStr;
 
